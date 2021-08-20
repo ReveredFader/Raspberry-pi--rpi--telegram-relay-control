@@ -39,24 +39,3 @@ class RPI:
                 return True
         else:
             return False
-
-'''
-RP = RPI([21])
-GPIO.setwarnings(False)
-status = RP.pin_status(21)
-print("Pin status: "  + str(status))
-
-# Enable pin
-if RP.pin_on(21):
-    print("Pin enabled")
-    print(RP.pin_status(21))
-
-time.sleep(5)
-
-# Disable pin
-if RP.pin_off(21):
-    print("Pin disabled")
-    print(RP.pin_status(21))
-
-GPIO.cleanup()
-'''
