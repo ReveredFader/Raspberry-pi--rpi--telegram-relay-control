@@ -75,8 +75,9 @@ async def send_rosettes(call: types.CallbackQuery):
     keyboard = types.InlineKeyboardMarkup()
     with open("data.json", "r") as read:
         data = json.load(read)
-    for i in data:
-        keyboard.add(types.InlineKeyboardButton(text=i, callback_data=i))
+    if len(data) > 0:
+        for i in data:
+            keyboard.add(types.InlineKeyboardButton(text=i, callback_data=i))
     keyboard.add(types.InlineKeyboardButton(text="Главное меню", callback_data="main"))
     await call.message.edit_text("Выберите розетку", reply_markup=keyboard)
 
@@ -126,7 +127,7 @@ async def answer_q1(message: types.Message, state: FSMContext):
         del data[answer]
         # Сохраним результат
         with open('data.json', 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump(data, f, ensure_ascii=False, indent=4, sort_keys=True)
         await message.answer("Розетка удалена!", reply_markup=keyboard)
         await state.finish()
         reinit_pin()
@@ -183,11 +184,10 @@ async def answer_q2(message: types.Message, state: FSMContext):
         await state.finish()
     
     else:
-        # Тут сделать добавление в json
         data[ans1] = int(ans2)
 
         with open('data.json', 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump(data, f, ensure_ascii=False, indent=4, sort_keys=True)
         
         reinit_pin()
         await message.answer("Розетка добавлена!", reply_markup=keyboard)
