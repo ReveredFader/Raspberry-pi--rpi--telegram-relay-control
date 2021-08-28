@@ -1,4 +1,8 @@
 # Raspberry pi (rpi) telegram relay control
+![alt tag](https://raw.githubusercontent.com/ReveredFader/Raspberry-pi--rpi--telegram-relay-control/main/pic/photo_2021-08-28_20-00-08.jpg)
+![alt tag](https://raw.githubusercontent.com/ReveredFader/Raspberry-pi--rpi--telegram-relay-control/main/pic/photo_2021-08-28_20-00-25.jpg)
+![alt tag](https://raw.githubusercontent.com/ReveredFader/Raspberry-pi--rpi--telegram-relay-control/main/pic/photo_2021-08-28_20-00-30.jpg)
+
  With this project you can control a 5 volt relay using a bot in telegram
 
 Preparing
