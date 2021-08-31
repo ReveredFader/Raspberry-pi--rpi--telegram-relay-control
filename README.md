@@ -18,7 +18,7 @@ You can find out your id with the bot https://t.me/userinfobot
 pip3 install -r requirements.txt
 ```
   
-5) Run the bot with the command 
+4) Run the bot with the command 
 ```
 python3 bot.py
 ```
