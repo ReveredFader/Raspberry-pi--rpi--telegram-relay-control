@@ -12,8 +12,12 @@ Preparing
 2) In order to define the users who will be given access to use the bot, enter the user id separated by commas in config.py
 
 You can find out your id with the bot https://t.me/userinfobot
-
-3) Run the bot with the command 
+3) Install requirements.txt file using command  
+```
+pip3 install -r requirements.txt
+```
+  
+5) Run the bot with the command 
 ```
 python3 bot.py
 ```
