@@ -14,6 +14,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 
+ALLOWED_PINS = list(range(2, 28))
+
 # log level
 logging.basicConfig(level=logging.INFO)
 
@@ -162,36 +164,44 @@ async def answer_q2(message: types.Message, state: FSMContext):
     ans1 = data.get("answer1")
     ans2 = message.text
 
-    try:
-        ans2 = int(ans2)
-    except:
-        pass
-
     # Сразу создадим кнопки
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(types.InlineKeyboardButton(text="Управление розетками", callback_data="rosettes"))
     keyboard.add(types.InlineKeyboardButton(text="Редакция розеток", callback_data="redact_rosette"))
 
+    # Пытаемся сделать из ответа число, если не получается выводим ошибку
+    try:
+        ans2 = int(ans2)
+    except:
+        await message.answer("Неправильно введен пин!", reply_markup=keyboard)
+        await state.finish()
+
     with open("data.json", "r") as read:
         data = json.load(read)
 
+    # Проверяем есть ли уже розетка с таким пином или названием
     if ans1 in data or ans2 in list(data.values()):
         await message.answer("Розетка с таким пином или названием уже существует!", reply_markup=keyboard)
-        await state.finish()
 
-    elif not isinstance(ans2, int):
-        await message.answer("Неправильно введен пин!", reply_markup=keyboard)
-        await state.finish()
+    # Если ответ не стал числом, выводим ошибку
+    # elif not isinstance(ans2, int):
+    #     await message.answer("Неправильно введен пин!", reply_markup=keyboard)
+
+    # Выводим ошибку если номера пина нет в списке допустимых значений
+    elif ans2 in ALLOWED_PINS:
+        await message.answer("Вы не можете использовать данный пин", reply_markup=keyboard)\
     
     else:
+        # Если все получилось то добавим эту розетку
         data[ans1] = int(ans2)
 
+        # Сохраняем в json
         with open('data.json', 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4, sort_keys=True)
         
         reinit_pin()
         await message.answer("Розетка добавлена!", reply_markup=keyboard)
-        await state.finish()
+    await state.finish()
 
 
 @dp.callback_query_handler()
