@@ -116,7 +116,7 @@ async def enter_test(call: types.CallbackQuery):
 
 
 @dp.message_handler(state=DelRosetter.Q1)
-async def answer_q1(message: types.Message, state: FSMContext):
+async def answer_del_q1(message: types.Message, state: FSMContext):
     answer = message.text
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(types.InlineKeyboardButton(text="Управление розетками", callback_data="rosettes"))
@@ -188,7 +188,7 @@ async def answer_q2(message: types.Message, state: FSMContext):
     #     await message.answer("Неправильно введен пин!", reply_markup=keyboard)
 
     # Выводим ошибку если номера пина нет в списке допустимых значений
-    elif ans2 in ALLOWED_PINS:
+    elif not ans2 in ALLOWED_PINS:
         await message.answer("Вы не можете использовать данный пин", reply_markup=keyboard)\
     
     else:
