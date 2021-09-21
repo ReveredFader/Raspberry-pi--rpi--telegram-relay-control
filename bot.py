@@ -108,10 +108,8 @@ class DelRosetter(StatesGroup):
 async def enter_test(call: types.CallbackQuery):
     with open("data.json", "r", encoding='utf-8') as read:
         data = json.load(read)
-    string = ""
-    for i in data:
-        string = string + (i + "\n")
-    await call.message.answer("Введите название розетки из списка\n" + string)
+    string = '\n'.join(data)
+    await call.message.answer(f"Введите название розетки из списка\n{string}")
     await DelRosetter.Q1.set()
 
 
@@ -173,8 +171,7 @@ async def answer_q2(message: types.Message, state: FSMContext):
     try:
         ans2 = int(ans2)
     except:
-        await message.answer("Неправильно введен пин!", reply_markup=keyboard)
-        await state.finish()
+        pass
 
     with open("data.json", "r") as read:
         data = json.load(read)
@@ -183,13 +180,9 @@ async def answer_q2(message: types.Message, state: FSMContext):
     if ans1 in data or ans2 in list(data.values()):
         await message.answer("Розетка с таким пином или названием уже существует!", reply_markup=keyboard)
 
-    # Если ответ не стал числом, выводим ошибку
-    # elif not isinstance(ans2, int):
-    #     await message.answer("Неправильно введен пин!", reply_markup=keyboard)
-
     # Выводим ошибку если номера пина нет в списке допустимых значений
     elif not ans2 in ALLOWED_PINS:
-        await message.answer("Вы не можете использовать данный пин", reply_markup=keyboard)\
+        await message.answer("Вы не можете использовать данный пин", reply_markup=keyboard)
     
     else:
         # Если все получилось то добавим эту розетку
@@ -216,11 +209,11 @@ async def add_rosette(call: types.CallbackQuery):
         await call.message.edit_text("Розетка " + call["data"], reply_markup=keyboard)
     elif call["data"][:3] == "on_":
         if RP.pin_on(data[call["data"][3:]]):
-            print("Pin enabled")
+            print("Pin {} enabled".format(data[call["data"][4:]]))
             await call.answer(text="Розетка включена", show_alert=True)
     elif call["data"][:4] == "off_":
         if RP.pin_off(data[call["data"][4:]]):
-            print("Pin disabled")
+            print("Pin {} disabled".format(data[call["data"][4:]]))
             await call.answer(text="Розетка выключена", show_alert=True)
 
 
