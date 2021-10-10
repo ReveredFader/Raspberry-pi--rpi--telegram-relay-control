@@ -79,7 +79,11 @@ async def send_rosettes(call: types.CallbackQuery):
         data = json.load(read)
     if len(data) > 0:
         for i in data:
-            keyboard.add(types.InlineKeyboardButton(text=i, callback_data=i))
+            status = RP.pin_status(data[i])
+            if status == 1:
+                keyboard.add(types.InlineKeyboardButton(text=i + " 🌙", callback_data=i))
+            elif status == 0:
+                keyboard.add(types.InlineKeyboardButton(text=i + " 💡", callback_data=i))
     keyboard.add(types.InlineKeyboardButton(text="Главное меню", callback_data="main"))
     await call.message.edit_text("Выберите розетку", reply_markup=keyboard)
 
@@ -208,11 +212,11 @@ async def add_rosette(call: types.CallbackQuery):
         keyboard.add(types.InlineKeyboardButton(text="Управление розетками", callback_data="rosettes"))
         await call.message.edit_text("Розетка " + call["data"], reply_markup=keyboard)
     elif call["data"][:3] == "on_":
-        if RP.pin_on(data[call["data"][3:]]):
-            print("Pin {} enabled".format(data[call["data"][4:]]))
+        if RP.pin_off(data[call["data"][3:]]):
+            print("Pin {} enabled".format(data[call["data"][3:]]))
             await call.answer(text="Розетка включена", show_alert=True)
     elif call["data"][:4] == "off_":
-        if RP.pin_off(data[call["data"][4:]]):
+        if RP.pin_on(data[call["data"][4:]]):
             print("Pin {} disabled".format(data[call["data"][4:]]))
             await call.answer(text="Розетка выключена", show_alert=True)
 

@@ -1,19 +1,17 @@
 import RPi.GPIO as GPIO
-import time
-
 
 class RPI:
     def __init__(self, pins):
         GPIO.setmode(GPIO.BCM)
         for i in pins:
             GPIO.setup(i, GPIO.OUT)
-            GPIO.setup(i, GPIO.LOW)
+            GPIO.output(pin, True)
         self.pins = pins
     
     def re_init_pins(self, pins):
+        GPIO.setmode(GPIO.BCM)
         for i in pins:
             GPIO.setup(i, GPIO.OUT)
-            GPIO.setup(i, GPIO.LOW)
         self.pins = pins
 
     def pin_status(self, pin):
